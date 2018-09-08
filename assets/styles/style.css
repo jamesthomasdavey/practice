@@ -1,17 +1,30 @@
+html {
+  min-height: 100%;
+}
+
 body {
-  padding-top: 70px;
+  background: url("https://images.unsplash.com/photo-1517429481096-5bc77134f77c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6bf8664a40a24b1d4ef439b380d7696e&auto=format&fit=crop&w=3400&q=80");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  font-family: Lato, sans-serif;
+  color: #fff;
 }
 
-.jumbotron {
-  color: #2c3e50;
-  background: #ecf0f1;
+#content {
+  text-align: center;
+  padding-top: 25%;
+  text-shadow: 0px 4px 3px rgba(0, 0, 0, 0.4), 0px 8px 13px rgba(0, 0, 0, 0.1),
+    0px 18px 13px rgba(0, 0, 0, 0.1);
 }
 
-.navbar-inverse {
-  background: #2c3e50;
+h1 {
+  font-weight: 700;
+  font-size: 5em;
 }
 
-.navbar-inverse .navbar-nav > li > a,
-.navbar-inverse .navbar-brand {
-  color: white;
+hr {
+  width: 400px;
+  border-top: 1px solid #f8f8f8;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
