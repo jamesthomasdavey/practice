@@ -33,8 +33,10 @@ const app = (() => {
   };
 
   const win = () => {
-    squareDivs.forEach(squareDiv => {
-      squareDiv.style.backgroundColor = state.winningColor;
+    squareDivs.forEach((squareDiv, index) => {
+      setTimeout(() => {
+        squareDiv.style.backgroundColor = state.winningColor;
+      }, index * 50);
     });
     document.querySelector("#heading").style.background = state.winningColor;
     resetButton.style.color = state.winningColor;
@@ -80,8 +82,10 @@ const app = (() => {
     assignWinningColor();
     rgbWinningColorSpan.textContent = state.winningColor.toUpperCase();
     squareDivs.forEach((squareDiv, index) => {
-      squareDiv.style.backgroundColor = state.colors[index];
-      squareDiv.style.display = "block";
+      setTimeout(() => {
+        squareDiv.style.backgroundColor = state.colors[index];
+        squareDiv.style.display = "block";
+      }, index * 50);
       if (!state.isHard && index > 2) {
         squareDiv.style.backgroundColor = "transparent";
         squareDiv.style.display = "none";
