@@ -100,6 +100,6 @@ app.get("/campgrounds/new", (req, res) => {
   res.render("new.ejs");
 });
 
-app.listen(3000, () => {
+app.listen(process.env.PORT, process.env.IP, () => {
   console.log("Your server is running, hue man.");
 });
