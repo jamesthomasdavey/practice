@@ -1,0 +1,20 @@
+<% include ./partials/header %>
+
+<div class="main container">
+
+<% blogs.forEach(blogPost => { %>
+    <div>
+    <h2><%= blogPost.title %></h2>
+    <img src="<%= blogPost.image %>">
+    <span><%= blogPost.created %></span>
+    <p>
+        <% let subBody = blogPost.body.substring(0, 100).split(" ") %>
+        <% subBody.splice(-1, 1) %>
+        <%= subBody.join(" ") + "..." %>
+    </p>
+    <a href="/blogs/<%= blogPost._id %>">Read More</a>
+    </div>
+<% }); %>
+</div>
+
+<% include ./partials/footer %>
