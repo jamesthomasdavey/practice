@@ -1,0 +1,38 @@
+<% include ./partials/header %>
+
+<div class="container mb-4">
+  <div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      <h1 class="display-4">New Recipe</h1>
+      <p class="lead">Create a new recipe here!</p>
+    </div>
+  </div>
+  <form class="mb-4" action="/recipes" method="POST">
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input name="recipe[title]" type="text" class="form-control" id="title" required>
+    </div>
+    <div class="form-group">
+      <label for="description">Description</label>
+      <input name="recipe[description]" type="text" class="form-control" id="description" required>
+      <small id="descriptionHelp" class="form-text text-muted">Write a short description for your recipe.</small>
+    </div>
+    <div class="form-group">
+      <label for="image">Image</label>
+      <input name="recipe[image]" type="text" class="form-control" id="image" required>
+      <small id="imageHelp" class="form-text text-muted">Add a url of an example for this recipe.</small>
+    </div>
+    <div class="form-group">
+      <label for="ingredients">Ingredients</label>
+      <textarea name="recipe[ingredients]" class="form-control" id="ingredients" rows="4" placeholder="List your ingredients here, separated by commas."></textarea>
+    </div>
+    <div class="form-group">
+      <label for="instructions">Instructions</label>
+      <textarea name="recipe[instructions]" class="form-control" id="instructions" rows="4" placeholder="Write your instructions here, using full sentences separated by periods."></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+  
+</div>
+
+<% include ./partials/footer %>

@@ -15,10 +15,10 @@ app.use(methodOverride("_method"));
 // mongoose model config
 
 const blogSchema = new mongoose.Schema({
-    title: String,
-    image: String,
-    body: String,
-    created: {type: Date, default: Date.now}
+  title: String,
+  image: String,
+  body: String,
+  created: { type: Date, default: Date.now }
 });
 
 const Blog = mongoose.model("Blog", blogSchema);
@@ -34,8 +34,9 @@ app.get("/blogs", (req, res) => {
   Blog.find({}, (err, blogs) => {
     if (err) {
       console.log(err);
-    } else {
-      res.render("index", {blogs});
+    }
+    else {
+      res.render("index", { blogs });
     }
   })
 });
@@ -51,7 +52,8 @@ app.post("/blogs", (req, res) => {
   Blog.create(req.body.blog, (err, postDb) => {
     if (err) {
       res.render("new");
-    } else {
+    }
+    else {
       res.redirect("/blogs");
     }
   })
@@ -62,8 +64,9 @@ app.get("/blogs/:id", (req, res) => {
   Blog.findById(req.params.id, (err, blogPost) => {
     if (err) {
       console.log(err);
-    } else {
-      res.render("show", {blogPost});
+    }
+    else {
+      res.render("show", { blogPost });
     }
   })
 })
@@ -74,8 +77,9 @@ app.get("/blogs/:id/edit", (req, res) => {
   Blog.findById(req.params.id, (err, blogPost) => {
     if (err) {
       console.log(err);
-    } else {
-      res.render("edit", {blogPost})
+    }
+    else {
+      res.render("edit", { blogPost })
     }
   })
 })
@@ -95,7 +99,8 @@ app.delete("/blogs/:id", (req, res) => {
   Blog.findByIdAndRemove(req.params.id, (err) => {
     if (err) {
       console.log(err);
-    } else {
+    }
+    else {
       res.redirect("/blogs");
     }
   })
