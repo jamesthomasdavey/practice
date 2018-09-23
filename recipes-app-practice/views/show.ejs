@@ -1,0 +1,34 @@
+<% include ./partials/header %>
+
+<div class="container mb-4">
+
+  <img src="<%= recipe.image %>" style="display: block; max-width: 100%; margin: 0 auto;">
+  <h2><%= recipe.title %></h2>
+  <p><small class="text-muted">Posted <%= recipe.create.toDateString() %></small></p>
+  <p class="card-text"><%= recipe.description %></p>
+  
+  <div class="card mb-4" style="width: 100%;">
+    <div class="card-header">
+      Ingredients
+    </div>
+    <ul class="list-group list-group-flush">
+      <% recipe.ingredients.split(",").forEach(ingredient => { %>
+        <% if ( ingredient ) {%>
+          <li class="list-group-item"><%= ingredient %></li>
+        <% } %>
+      <% }) %>
+    </ul>
+  </div>
+
+  <ol class="list-group list-group-flush ml-4 mb-4">
+    <% recipe.instructions.split(".").forEach(instruction => { %>
+      <% if (instruction) { %>
+        <li><%= instruction %>.</li>
+      <% } %>
+    <% }) %>
+  </ol>
+  
+  <a class="btn btn-outline-secondary" href="/recipes/<%= recipe._id %>/edit" role="button">Edit</a>
+
+</div>
+<% include ./partials/footer %>
