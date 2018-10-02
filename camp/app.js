@@ -1,9 +1,16 @@
+// REQUIRE PACKAGES
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const passport = require("passport");
+const localStrategy = require("passport-local");
+// const passportLocalMongoose = require("passport-local-mongoose");
+
+// REQUIRE MODELS/JS
 const Campground = require("./models/campground");
 const Comment = require("./models/comment");
+const User = require("./models/user");
 const seedDB = require("./seeds");
 
 // SETUP

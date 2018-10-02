@@ -4,7 +4,7 @@ const express = require("express"),
   passport = require("passport"),
   bodyParser = require("body-parser"),
   LocalStrategy = require("passport-local"),
-  passportLocalMongoose = require("passport-local-mongoose"),
+  // passportLocalMongoose = require("passport-local-mongoose"),
   expressSession = require("express-session"),
   // import the User model.
   User = require("./models/user");
