@@ -88,10 +88,10 @@ app.post("/register", (req, res) => {
       // logs the user in, stores the correct information, runs the serializeUser method from passport-local-mongoose, and using the localStrategy.
       passport.authenticate("local")(req, res, () => {
         res.redirect("/secret");
-      })
+      });
     }
-  })
-})
+  });
+});
 
 // show the login form.
 app.get("/login", (req, res) => {

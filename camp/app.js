@@ -4,8 +4,9 @@ const app = express();
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const passport = require("passport");
-const localStrategy = require("passport-local");
+const LocalStrategy = require("passport-local");
 // const passportLocalMongoose = require("passport-local-mongoose");
+const expressSession = require("express-session");
 
 // REQUIRE MODELS/JS
 const Campground = require("./models/campground");
@@ -21,6 +22,19 @@ mongoose.connect("mongodb://localhost:27017/camp", { useNewUrlParser: true });
 
 // SEED
 seedDB();
+
+// PASSPORT CONFIGURATION
+app.use(expressSession({
+  secret: "I don't sleep anymore",
+  resave: false,
+  saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 // ROOT ROUTE
 app.get("/", (req, res) => {
@@ -123,6 +137,49 @@ app.post("/campgrounds/:id/comments", (req, res) => {
   })
 })
 
+//=====================
+//==== COMMENTS ROUTES
+//=====================
+
+// show register form
+
+app.get("/register", (req, res) => {
+  res.render("./register", { pageTitle: "Register" });
+})
+
+// handle sign up
+
+app.post("/register", (req, res) => {
+  const newUser = new User({ username: req.body.username });
+  User.register(newUser, req.body.password, (err, user) => {
+    if (err) {
+      console.log(err);
+      return res.render("./register");
+    }
+    passport.authenticate("local")(req, res, () => {
+      res.redirect("/campgrounds");
+    })
+  })
+})
+
+// show login form
+
+app.get("/login", (req, res) => {
+  res.render("./login", { pageTitle: "Login" });
+})
+
+// handle login
+
+app.post("/login", passport.authenticat("local", {
+  successRedirect: "/campgrounds",
+  failureRedirect: "/login"
+}), (req, res) => {})
+
+// logout route
+
+app.get("/logout", (req, res) => {
+  req.logout();
+})
 
 app.listen(process.env.PORT, process.env.IP, () => {
   console.log("Your server is running, hue man.");
