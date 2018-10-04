@@ -26,6 +26,19 @@ router.get("/", (req, res) => {
   })
 });
 
+// show campground route
+
+router.get("/:id", (req, res) => {
+  Campground.findById(req.params.id).populate("comments").exec((err, campground) => {
+    if (err) {
+      console.log(err)
+    }
+    else {
+      res.render("./campgrounds/show", { campground, pageTitle: "YelpCamp: " + campground.name })
+    }
+  })
+})
+
 // new campground route
 
 router.get("/new", isLoggedIn, (req, res) => {
@@ -56,14 +69,28 @@ router.post("/", isLoggedIn, (req, res) => {
   });
 });
 
-// show campground route
-router.get("/:id", (req, res) => {
-  Campground.findById(req.params.id).populate("comments").exec((err, campground) => {
+// edit campground route
+
+router.get("/:id/edit", isLoggedIn, (req, res) => {
+  Campground.findById(req.params.id, (err, campground) => {
     if (err) {
-      console.log(err)
+      console.log(err);
     }
     else {
-      res.render("./campgrounds/show", { campground, pageTitle: "YelpCamp: " + campground.name })
+      res.render("./campgrounds/edit", { campground, pageTitle: "YelpCamp: Edit " + campground.name });
+    }
+  })
+})
+
+// update campground route
+
+router.put("/:id", isLoggedIn, (req, res) => {
+  Campground.findByIdAndUpdate(req.params.id, req.body.campground, (err, campground) => {
+    if (err) {
+      console.log(err);
+    }
+    else {
+      res.redirect("/campgrounds/" + req.params.id);
     }
   })
 })

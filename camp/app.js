@@ -2,17 +2,15 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
+const methodOverride = require("method-override");
 const mongoose = require("mongoose");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
-// const passportLocalMongoose = require("passport-local-mongoose");
 const expressSession = require("express-session");
 
 // REQUIRE MODELS/JS
-// const Campground = require("./models/campground");
-// const Comment = require("./models/comment");
 const User = require("./models/user");
-const seedDB = require("./seeds");
+// const seedDB = require("./seeds");
 
 // REQUIRE ROUTES
 const campgroundRoutes = require("./routes/campgrounds");
@@ -22,6 +20,7 @@ const indexRoutes = require("./routes/index");
 // SETUP
 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(methodOverride("_method"));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "public"));
 mongoose.connect("mongodb://localhost:27017/camp", { useNewUrlParser: true });
@@ -46,6 +45,7 @@ passport.deserializeUser(User.deserializeUser());
 
 // use middleware, include routes as middleware
 
+// always passes in the current user as a variable called currentUser
 app.use((req, res, next) => {
   res.locals.currentUser = req.user;
   next();
