@@ -2,6 +2,15 @@ const express = require("express");
 const router = express.Router();
 const Campground = require("./../models/campground");
 
+// define middleware
+
+const isLoggedIn = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect("/login");
+};
+
 // index route
 
 router.get("/", (req, res) => {
@@ -19,23 +28,24 @@ router.get("/", (req, res) => {
 
 // new campground route
 
-router.get("/new", (req, res) => {
+router.get("/new", isLoggedIn, (req, res) => {
   res.render("./campgrounds/new", { pageTitle: "YelpCamp: Add a New Campground" });
 });
 
 // create campground route
 
-router.post("/", (req, res) => {
+router.post("/", isLoggedIn, (req, res) => {
   // gets properties of new campground from request
-  const name = req.body.name;
-  const image = req.body.image;
-  const description = req.body.description;
 
   // saves new campground to database
   Campground.create({
-    name: name,
-    image: image,
-    description: description
+    name: req.body.name,
+    image: req.body.image,
+    description: req.body.description,
+    creator: {
+      id: req.user._id,
+      username: req.user.username
+    }
   }, (err, newCampground) => {
     if (err) {
       console.log(err)

@@ -33,20 +33,21 @@ router.post("/", isLoggedIn, (req, res) => {
       console.log(err);
     }
     else {
-      Comment.create(req.body.comment, (err, comment) => {
+      const newComment = {
+        text: req.body.comment.text,
+        author: {
+          id: req.user._id,
+          username: req.user.username
+        }
+      }
+      Comment.create(newComment, (err, comment) => {
         if (err) {
           console.log(err);
         }
         else {
           campground.comments.push(comment);
-          campground.save(err => {
-            if (err) {
-              console.log(err);
-            }
-            else {
-              res.redirect("/campgrounds/" + campground._id);
-            }
-          });
+          campground.save();
+          res.redirect("/campgrounds/" + campground._id);
         }
       });
     }
