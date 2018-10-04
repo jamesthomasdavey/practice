@@ -9,8 +9,8 @@ const LocalStrategy = require("passport-local");
 const expressSession = require("express-session");
 
 // REQUIRE MODELS/JS
-const Campground = require("./models/campground");
-const Comment = require("./models/comment");
+// const Campground = require("./models/campground");
+// const Comment = require("./models/comment");
 const User = require("./models/user");
 const seedDB = require("./seeds");
 
@@ -49,10 +49,10 @@ passport.deserializeUser(User.deserializeUser());
 app.use((req, res, next) => {
   res.locals.currentUser = req.user;
   next();
-})
-app.use(campgroundRoutes);
-app.use(commentRoutes);
-app.use(indexRoutes);
+});
+app.use("/campgrounds", campgroundRoutes);
+app.use("/campgrounds/:id/comments", commentRoutes);
+app.use("/", indexRoutes);
 
 // run server
 
