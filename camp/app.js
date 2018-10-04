@@ -36,6 +36,15 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// MIDDLEWARE
+
+const isLoggedIn = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect("/login");
+}
+
 // ROOT ROUTE
 app.get("/", (req, res) => {
   res.render("./landing", { pageTitle: "Welcome to YelpCamp" });
@@ -99,7 +108,7 @@ app.get("/campgrounds/:id", (req, res) => {
 //=====================
 
 // NEW
-app.get("/campgrounds/:id/comments/new", (req, res) => {
+app.get("/campgrounds/:id/comments/new", isLoggedIn, (req, res) => {
   Campground.findById(req.params.id, (err, campground) => {
     if (err) {
       console.log(err);
@@ -170,7 +179,7 @@ app.get("/login", (req, res) => {
 
 // handle login
 
-app.post("/login", passport.authenticat("local", {
+app.post("/login", passport.authenticate("local", {
   successRedirect: "/campgrounds",
   failureRedirect: "/login"
 }), (req, res) => {})
@@ -179,6 +188,7 @@ app.post("/login", passport.authenticat("local", {
 
 app.get("/logout", (req, res) => {
   req.logout();
+  res.redirect("/campgrounds");
 })
 
 app.listen(process.env.PORT, process.env.IP, () => {
