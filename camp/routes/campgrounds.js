@@ -26,19 +26,6 @@ router.get("/", (req, res) => {
   })
 });
 
-// show campground route
-
-router.get("/:id", (req, res) => {
-  Campground.findById(req.params.id).populate("comments").exec((err, campground) => {
-    if (err) {
-      console.log(err)
-    }
-    else {
-      res.render("./campgrounds/show", { campground, pageTitle: "YelpCamp: " + campground.name })
-    }
-  })
-})
-
 // new campground route
 
 router.get("/new", isLoggedIn, (req, res) => {
@@ -68,6 +55,19 @@ router.post("/", isLoggedIn, (req, res) => {
     }
   });
 });
+
+// show campground route
+
+router.get("/:id", (req, res) => {
+  Campground.findById(req.params.id).populate("comments").exec((err, campground) => {
+    if (err) {
+      console.log(err)
+    }
+    else {
+      res.render("./campgrounds/show", { campground, pageTitle: "YelpCamp: " + campground.name })
+    }
+  })
+})
 
 // edit campground route
 
