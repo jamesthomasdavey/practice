@@ -28,7 +28,7 @@ const isCampgroundOwner = (req, res, next) => {
     })
   }
   else {
-    res.redirect("back");
+    res.redirect("/login");
   }
 }
 

@@ -19,7 +19,7 @@ const isCommentOwner = (req, res, next) => {
         console.log(err);
       }
       else {
-        if (foundComment.creator.id.equals(req.user._id)) {
+        if (foundComment.author.id.equals(req.user._id)) {
           return next();
         }
         else {
@@ -28,7 +28,9 @@ const isCommentOwner = (req, res, next) => {
       }
     })
   }
-  res.redirect("/login");
+  else {
+    res.redirect("/login");
+  }
 }
 
 // new comment route
@@ -75,7 +77,7 @@ router.post("/", isLoggedIn, (req, res) => {
 
 // edit comment route
 
-router.get("/:commentId/edit", (req, res) => {
+router.get("/:commentId/edit", isCommentOwner, (req, res) => {
   Campground.findById(req.params.id, (err, foundCampground) => {
     if (err) {
       console.log(err);
@@ -95,7 +97,7 @@ router.get("/:commentId/edit", (req, res) => {
 
 // update comment route
 
-router.put("/:commentId", (req, res) => {
+router.put("/:commentId", isCommentOwner, (req, res) => {
   Comment.findByIdAndUpdate(req.params.commentId, req.body.comment, (err, updatedComment) => {
     if (err) {
       console.log(err);
@@ -108,7 +110,7 @@ router.put("/:commentId", (req, res) => {
 
 // delete comment route
 
-router.delete("/:commentId", (req, res) => {
+router.delete("/:commentId", isCommentOwner, (req, res) => {
   Comment.findByIdAndRemove(req.params.commentId, (err) => {
     if (err) {
       console.log(err)
