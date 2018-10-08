@@ -2,40 +2,11 @@ const express = require("express");
 const router = express.Router({ mergeParams: true });
 const Campground = require("./../models/campground");
 const Comment = require("./../models/comment");
-
-// define middleware
-
-const isLoggedIn = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect("/login");
-};
-
-const isCommentOwner = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    Comment.findById(req.params.commentId, (err, foundComment) => {
-      if (err) {
-        console.log(err);
-      }
-      else {
-        if (foundComment.author.id.equals(req.user._id)) {
-          return next();
-        }
-        else {
-          res.redirect("back");
-        }
-      }
-    })
-  }
-  else {
-    res.redirect("/login");
-  }
-}
+const middleware = require("./../middleware")
 
 // new comment route
 
-router.get("/new", isLoggedIn, (req, res) => {
+router.get("/new", middleware.isLoggedIn, (req, res) => {
   Campground.findById(req.params.id, (err, campground) => {
     if (err) {
       console.log(err);
@@ -48,7 +19,7 @@ router.get("/new", isLoggedIn, (req, res) => {
 
 // create comment route
 
-router.post("/", isLoggedIn, (req, res) => {
+router.post("/", middleware.isLoggedIn, (req, res) => {
   Campground.findById(req.params.id, (err, campground) => {
     if (err) {
       console.log(err);
@@ -77,7 +48,7 @@ router.post("/", isLoggedIn, (req, res) => {
 
 // edit comment route
 
-router.get("/:commentId/edit", isCommentOwner, (req, res) => {
+router.get("/:commentId/edit", middleware.isCommentOwner, (req, res) => {
   Campground.findById(req.params.id, (err, foundCampground) => {
     if (err) {
       console.log(err);
@@ -97,7 +68,7 @@ router.get("/:commentId/edit", isCommentOwner, (req, res) => {
 
 // update comment route
 
-router.put("/:commentId", isCommentOwner, (req, res) => {
+router.put("/:commentId", middleware.isCommentOwner, (req, res) => {
   Comment.findByIdAndUpdate(req.params.commentId, req.body.comment, (err, updatedComment) => {
     if (err) {
       console.log(err);
@@ -110,7 +81,7 @@ router.put("/:commentId", isCommentOwner, (req, res) => {
 
 // delete comment route
 
-router.delete("/:commentId", isCommentOwner, (req, res) => {
+router.delete("/:commentId", middleware.isCommentOwner, (req, res) => {
   Comment.findByIdAndRemove(req.params.commentId, (err) => {
     if (err) {
       console.log(err)
