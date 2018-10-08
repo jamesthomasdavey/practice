@@ -12,6 +12,25 @@ const isLoggedIn = (req, res, next) => {
   res.redirect("/login");
 };
 
+const isCommentOwner = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    Comment.findById(req.params.commentId, (err, foundComment) => {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        if (foundComment.creator.id.equals(req.user._id)) {
+          return next();
+        }
+        else {
+          res.redirect("back");
+        }
+      }
+    })
+  }
+  res.redirect("/login");
+}
+
 // new comment route
 
 router.get("/new", isLoggedIn, (req, res) => {
@@ -80,6 +99,19 @@ router.put("/:commentId", (req, res) => {
   Comment.findByIdAndUpdate(req.params.commentId, req.body.comment, (err, updatedComment) => {
     if (err) {
       console.log(err);
+    }
+    else {
+      res.redirect("/campgrounds/" + req.params.id);
+    }
+  })
+})
+
+// delete comment route
+
+router.delete("/:commentId", (req, res) => {
+  Comment.findByIdAndRemove(req.params.commentId, (err) => {
+    if (err) {
+      console.log(err)
     }
     else {
       res.redirect("/campgrounds/" + req.params.id);
