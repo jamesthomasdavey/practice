@@ -7,9 +7,9 @@ middlewareObj.isLoggedIn = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
   }
+  req.flash("error", "You must be logged in to do that.")
   res.redirect("/login");
 };
-
 
 middlewareObj.isCommentOwner = (req, res, next) => {
   if (req.isAuthenticated()) {
@@ -22,12 +22,14 @@ middlewareObj.isCommentOwner = (req, res, next) => {
           return next();
         }
         else {
+          req.flash("error", "You are not authorized to do that");
           res.redirect("back");
         }
       }
     })
   }
   else {
+    req.flash("error", "You must be logged in to do that.");
     res.redirect("/login");
   }
 }
@@ -36,6 +38,7 @@ middlewareObj.isCampgroundOwner = (req, res, next) => {
   if (req.isAuthenticated()) {
     Campground.findById(req.params.id, (err, campground) => {
       if (err) {
+        req.flash("error", "Campground not found!");
         console.log(err);
       }
       else {
@@ -43,12 +46,14 @@ middlewareObj.isCampgroundOwner = (req, res, next) => {
           next();
         }
         else {
+          req.flash("error", "You are not authorized to do that.")
           res.redirect("back");
         }
       }
     })
   }
   else {
+    req.flash("error", "You must be logged in to do that.")
     res.redirect("/login");
   }
 }

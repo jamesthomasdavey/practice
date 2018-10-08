@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 // const passportLocalMongoose = require("passport-local-mongoose");
@@ -24,6 +25,7 @@ const indexRoutes = require("./routes/index");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
+app.use(flash());
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "public"));
 mongoose.connect("mongodb://localhost:27017/camp", { useNewUrlParser: true });
@@ -50,6 +52,8 @@ passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
   res.locals.currentUser = req.user;
+  res.locals.error = req.flash("error");
+  res.locals.success = req.flash("success");
   next();
 });
 app.use("/campgrounds", campgroundRoutes);
