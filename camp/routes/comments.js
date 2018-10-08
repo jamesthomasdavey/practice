@@ -54,6 +54,39 @@ router.post("/", isLoggedIn, (req, res) => {
   });
 });
 
+// edit comment route
+
+router.get("/:commentId/edit", (req, res) => {
+  Campground.findById(req.params.id, (err, foundCampground) => {
+    if (err) {
+      console.log(err);
+    }
+    else {
+      Comment.findById(req.params.commentId, (err, foundComment) => {
+        if (err) {
+          console.log(err);
+        }
+        else {
+          res.render("./comments/edit", { comment: foundComment, campground: foundCampground, pageTitle: "YelpCamp: Edit comment for " + foundCampground.name });
+        }
+      })
+    }
+  })
+})
+
+// update comment route
+
+router.put("/:commentId", (req, res) => {
+  Comment.findByIdAndUpdate(req.params.commentId, req.body.comment, (err, updatedComment) => {
+    if (err) {
+      console.log(err);
+    }
+    else {
+      res.redirect("/campgrounds/" + req.params.id);
+    }
+  })
+})
+
 // export
 
 module.exports = router;
